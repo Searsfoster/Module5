@@ -1,0 +1,64 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+// Function to reverse a string
+string reverseLine(const string& line) {
+    string reversed = line;
+    reverse(reversed.begin(), reversed.end());
+    return reversed;
+}
+
+int main() {
+    string inputFile = "CSC450_CT5_mod5.txt";         // relative path
+    string outputFile = "CSC450-mod5-reverse.txt";    // relative path
+
+    string userText;
+
+    // Ask user for input
+    cout << "Enter text to append to file: ";
+    getline(cin, userText);
+
+    // Append user input to the file
+    ofstream outFile(inputFile, ios::app);
+    if (!outFile) {
+        cerr << "Error opening file for appending.\n";
+        return 1;
+    }
+    outFile << userText << endl;
+    outFile.close();
+
+    // Read the file line by line
+    ifstream inFile(inputFile);
+    if (!inFile) {
+        cerr << "Error opening file for reading.\n";
+        return 1;
+    }
+
+    vector<string> allLines;
+    string line;
+    while (getline(inFile, line)) {
+        allLines.push_back(line);
+    }
+    inFile.close();
+
+    // Reverse each line and write to the output file
+    ofstream revFile(outputFile);
+    if (!revFile) {
+        cerr << "Error creating reversed output file.\n";
+        return 1;
+    }
+
+    for (const auto& ln : allLines) {
+        revFile << reverseLine(ln) << endl;
+    }
+    revFile.close();
+
+    cout << "Text successfully appended and reversed file generated.\n";
+
+    return 0;
+}
